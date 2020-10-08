@@ -14,6 +14,8 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 local freedesktop = require("freedesktop")
 -- Enable VIM help for hotkeys widget when client with matching name is opened:
 require("awful.hotkeys_popup.keys.vim")
+-- Volume Control Widget
+local volume_widget = require("volume-widget.volume")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -42,7 +44,7 @@ end
 -- Themes define colours, icons, font and wallpapers.
 -- Chosen colors and buttons look alike adapta maia theme
 beautiful.init(require("theme"))
-beautiful.icon_theme        = "Papirus-Dark"  -- Probably useless
+beautiful.icon_theme        = "Reversal-Dark"  -- Probably useless
 beautiful.bg_normal         = "#101010"
 beautiful.bg_focus          = "#1f1f1f"
 -- beautiful.titlebar_close_button_normal = "/usr/share/awesome/themes/cesious/titlebar/close_normal_adapta.png"
@@ -58,7 +60,7 @@ browser = "brave-browser"
 -- browser = "firefox"
 --------------------------------------------------------------------------------
 -- Filemanager -----------------------------------------------------------------
-filemanager = "dolphin"
+filemanager = "pcmanfm-qt"
 --------------------------------------------------------------------------------
 -- Text Editor -----------------------------------------------------------------
 gui_editor = "code"
@@ -314,6 +316,14 @@ awful.screen.connect_for_each_screen(function(s)
     -----------------------------------------------------------------------------------------------
 
     -----------------------------------------------------------------------------------------------
+    -- Create Volume widget -----------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------
+    s.volume_widget = volume_widget()
+    -----------------------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------
+
+    -----------------------------------------------------------------------------------------------
     -- Create the wibox ---------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
     s.mywibox = awful.wibar({ position = "top", screen = s, bg = beautiful.bg_systray }) 
@@ -335,6 +345,7 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             wibox.widget.systray(),
             mykeyboardlayout,
+            s.volume_widget,
             separator,
             mytextclock,
             s.mylayoutbox,
