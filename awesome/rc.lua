@@ -44,17 +44,10 @@ end
 -- Themes define colours, icons, font and wallpapers.
 -- Chosen colors and buttons look alike adapta maia theme
 beautiful.init(require("theme"))
--- beautiful.icon_theme        = "Reversal-Dark"  -- Probably useless
-beautiful.bg_normal         = "#101010"
-beautiful.bg_focus          = "#1f1f1f"
--- beautiful.titlebar_close_button_normal = "/usr/share/awesome/themes/cesious/titlebar/close_normal_adapta.png"
--- beautiful.titlebar_close_button_focus = "/usr/share/awesome/themes/cesious/titlebar/close_focus_adapta.png"
-beautiful.font              = "Noto Sans Regular 10"
-beautiful.notification_font = "Noto Sans Bold 14"
 
 -- This is used later as the default terminal and editor to run.
 -- Browsers --------------------------------------------------------------------
-browser = "brave-browser"
+browser = "brave"
 -- browser = "google-chrome --force-dark-mode"
 -- browser = "opera"
 -- browser = "firefox"
@@ -63,7 +56,7 @@ browser = "brave-browser"
 filemanager = "pcmanfm-qt"
 --------------------------------------------------------------------------------
 -- Text Editor -----------------------------------------------------------------
-gui_editor = "code"
+gui_editor = "subl"
 --------------------------------------------------------------------------------
 -- Terminal Emulator -----------------------------------------------------------
 terminal = "alacritty"
@@ -161,7 +154,7 @@ darkblue    = beautiful.bg_focus
 blue        = "#0066ff"
 red         = "#EB8F8F"
 separator = wibox.widget.textbox(' <span color="' .. blue .. '">| </span>')
-spacer = wibox.widget.textbox(' <span color="' .. blue .. '"> </span>')
+spacer = wibox.widget.textbox(' <span color="' .. "#00000000" .. '"> </span>')
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -230,14 +223,35 @@ awful.screen.connect_for_each_screen(function(s)
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
+    
+
+    -----------------------------------------------------------------------------------------------
+    -- Layout Box ---------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
-    s.mylayoutbox = awful.widget.layoutbox(s)
-    s.mylayoutbox:buttons(gears.table.join(
+    local layoutbox = awful.widget.layoutbox(s)
+    layoutbox:buttons(gears.table.join(
                            awful.button({ }, 1, function () awful.layout.inc( 1) end),
                            awful.button({ }, 3, function () awful.layout.inc(-1) end),
                            awful.button({ }, 4, function () awful.layout.inc( 1) end),
                            awful.button({ }, 5, function () awful.layout.inc(-1) end)))
+
+     -- Use container to adjust widgets size
+     local size_cont_layout_box = wibox.container.constraint(layoutbox, 'exact', 25, 25)
+     -- Use container to adjust widgets alignment
+     s.layout_widget = wibox.container.place( size_cont_layout_box, 'center', 'center')
+    -----------------------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------
+
+    -----------------------------------------------------------------------------------------------
+    -- Systray ------------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------
+    local systray_pure_widget = wibox.widget.systray()
+    local size_cont_systray =  wibox.container.constraint(systray_pure_widget, 'exact', nil, 25)
+    s.systray_widget = wibox.container.place( size_cont_systray, 'center', 'center')
+    -----------------------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------
 
     -----------------------------------------------------------------------------------------------
     -- Create a taglist widget --------------------------------------------------------------------
@@ -247,8 +261,17 @@ awful.screen.connect_for_each_screen(function(s)
         screen  = s,
         filter  = awful.widget.taglist.filter.all,
         style   = {
-            shape = function(cr,w,h)
-                gears.shape.partially_rounded_rect(cr, w, h, true, true, false, false, 10)
+            -- shape = function(cr,w,h)
+            --     gears.shape.partially_rounded_rect(cr, w, h, true, true, false, false, 10)
+            -- end
+            shape = function(cr, width, height)
+                cr:move_to(height/4,0)
+                cr:line_to(width,0)
+                cr:line_to(width,height - height/4)
+                cr:line_to(width - height/4,height)
+                cr:line_to(0,height)
+                cr:line_to(0,height/4)
+                cr:close_path()
             end
         },
         widget_template = {
@@ -318,7 +341,37 @@ awful.screen.connect_for_each_screen(function(s)
     -----------------------------------------------------------------------------------------------
     -- Create Volume widget -----------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
-    -- s.volume_widget = volume_widget()
+    volume_widget = wibox.widget.textbox()
+    volume_widget:set_align("right")
+
+    function update_volume(widget)
+       local fd = io.popen("amixer sget Master")
+       local status = fd:read("*all")
+       fd:close()
+
+       local volume = string.match(status, "(%d?%d?%d)%%")
+       volume = string.format("% 3d", volume)
+
+       status = string.match(status, "%[(o[^%]]*)%]")
+
+       if string.find(status, "on", 1, true) then
+       -- For the volume number percentage 
+           volume = volume .. "%"
+       else
+       -- For displaying the mute status.
+           volume = volume .. "X"
+           
+       end
+       widget:set_markup(" Volume: " .. volume)
+    end
+
+    update_volume(volume_widget)
+
+    mytimer = timer({ timeout = 0.2 })
+    mytimer:connect_signal("timeout", function () update_volume(volume_widget) end)
+    mytimer:start()
+    
+    -- s.volume_widget = volume_widget
     -----------------------------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
@@ -326,7 +379,7 @@ awful.screen.connect_for_each_screen(function(s)
     -----------------------------------------------------------------------------------------------
     -- Create the wibox ---------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
-    s.mywibox = awful.wibar({ position = "top", screen = s, bg = beautiful.bg_systray }) 
+    s.mywibox = awful.wibar({ position = "top", screen = s, bg = beautiful.bg_wibar }) 
     
     -----------------------------------------------------------------------------------------------
     -- Add widgets to the wibox -------------------------------------------------------------------
@@ -343,12 +396,16 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            wibox.widget.systray(),
+            s.systray_widget,
+            separator,
             mykeyboardlayout,
-            -- s.volume_widget,
+            separator,
+            volume_widget,
             separator,
             mytextclock,
-            s.mylayoutbox,
+            separator,
+            s.layout_widget,
+            spacer
         },
     }
     -----------------------------------------------------------------------------------------------
@@ -464,7 +521,7 @@ globalkeys = gears.table.join(
     awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
               {description = "run prompt", group = "launcher"}),
 
-    awful.key({ modkey }, "ö",
+    awful.key({ modkey }, "`",
               function ()
                   awful.prompt.run {
                     prompt       = "Run Lua code: ",
@@ -556,12 +613,6 @@ clientkeys = gears.table.join(
             awful.util.spawn("playerctl next", false) 
         end, 
         {description = "Previous with media keys", group = "media"}),
-    -- Change language HARDCODED
-    awful.key({ modkey,           }, "space", 
-        function () 
-            os.execute("~/swl")  -- TODO: Make script more parametric
-        end, 
-        {description = "Switch languages between greek and english", group = "Keyboard Layout"}),
      awful.key({modkey,           }, "a", 
         function () 
             awful.util.spawn("rofi -show drun") 
@@ -691,7 +742,7 @@ awful.rules.rules = {
     { rule = { class = "Google-chrome" }, properties = { screen = 1, tag = "Web" } },
     { rule = { class = "Brave-browser" }, properties = { screen = 1, tag = "Web" } },
     { rule = { class = "Opera" }, properties = { screen = 1, tag = "Web" } },
-    { rule = { class = "Code" }, properties = { screen = 1, tag = "Code" } },  
+    { rule = { class = "Subl" }, properties = { screen = 1, tag = "Code" } },  
     { rule = { class = "gwenview" }, properties = { screen = 1, tag = "Media" } },  
     { rule = { class = "vlc" }, properties = { screen = 1, tag = "Media" } },  
     { rule = { class = "Gimp-2.10" }, properties = { screen = 1, tag = "Media" } }, 
@@ -764,8 +815,8 @@ client.connect_signal("mouse::enter", function(c)
     end
 end)
 
--- client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
--- client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 
 -- Disable borders on lone windows
 -- Handle border sizes of clients.
@@ -784,16 +835,16 @@ for s = 1, screen.count() do screen[s]:connect_signal("arrange", function ()
     elseif layout == "max" or layout == "fullscreen" then
       c.border_width = 0
     else
-      local tiled = awful.client.tiled(c.screen)
-      if #tiled == 1 then -- and c == tiled[1] then
-        tiled[1].border_width = 0
+    --   local tiled = awful.client.tiled(c.screen)
+    --   if #tiled == 1 then -- and c == tiled[1] then
+        -- tiled[1].border_width = 0
         -- if layout ~= "max" and layout ~= "fullscreen" then
         -- XXX: SLOW!
         -- awful.client.moveresize(0, 0, 2, 0, tiled[1])
         -- end
-      else
+    --   else
         c.border_width = beautiful.border_width
-      end
+    --   end
     end
   end
 end)
@@ -813,7 +864,6 @@ end
 client.connect_signal("manage", function (c)
     c.shape = function(cr,w,h)
         gears.shape.rounded_rect(cr,w,h,5)
-        -- gears.shape.rectangle(cr,w,h)
     end
 end)
 
@@ -824,7 +874,3 @@ awful.spawn.with_shell("~/.config/awesome/autorun.sh")
 -------------------------------------------------------
 -- no tooltip
 awful.titlebar.enable_tooltip = false
-
--- opacity
-
-

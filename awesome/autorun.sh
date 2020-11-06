@@ -24,3 +24,4 @@ fi
 
 run nitrogen --restore
 run picom --config  ~/.config/picom.conf -b --experimental-backends
+run setxkbmap -layout "us,gr" -option "grp:alt_shift_toggle"

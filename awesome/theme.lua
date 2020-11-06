@@ -1,18 +1,19 @@
 local dpi = require('beautiful').xresources.apply_dpi
+local gears = require("gears")
 
 local themes_path = "~/.config/awesome/"
 local blue = "#0066ff"
 
 theme = {}
 
-theme.font              = "Noto Sans Regular 10"
-theme.notification_font = "Noto Sans Bold 14"
+theme.font              = "Cantarell Bold 11"
 
 theme.bg_normal   = "#0d1a26" .. "00"
 theme.bg_focus    = "#222B2E" .. "00"
 theme.bg_urgent   = "#000000" .. "00"
 theme.bg_minimize = "#101010" .. "00"
-theme.bg_systray  = "#0d1a26" .. "99"
+theme.bg_wibar 	  = "#000000" .. "99"
+theme.bg_systray  = "#0d1a26" .. "00"
 
 theme.fg_normal   = "#ffffff"
 theme.fg_focus    = "#ffffff"
@@ -26,8 +27,8 @@ theme.tasklist_bg_normal   = "#8aa1a8" .. "10"
 
 theme.border_width  = 1
 theme.border_normal = "#000000"
-theme.border_focus  = blue
-theme.border_marked = blue
+theme.border_focus  = blue .. "30"
+theme.border_marked = blue .. "30"
 
 theme.titlebar_size = dpi(34)
 theme.titlebar_bg_focus = "#000000" .. "a6"
@@ -43,11 +44,10 @@ theme.hotkeys_modifiers_fg = "#2EB398"
 -- tooltip_[font|opacity|fg_color|bg_color|border_width|border_color]
 -- mouse_finder_[color|timeout|animate_timeout|radius|factor]
 -- Example:
---theme.taglist_bg_focus = "#ff0000"
 
 -- Display the taglist squares
--- theme.taglist_squares_sel   = themes_path .. "taglist/squarefw.png"
--- theme.taglist_squares_unsel = themes_path .. "taglist/squarew.png"
+theme.taglist_squares_sel   = themes_path .. "images/tag_buttons/active_filled.png"
+theme.taglist_squares_unsel = themes_path .. "images/tag_buttons/inactive_filled.png"
 
 -- Variables set for theming the menu:
 -- menu_[bg|fg]_[normal|focus]
@@ -82,7 +82,7 @@ theme.titlebar_maximized_button_focus_active    = themes_path .. "images/caption
 theme.titlebar_maximized_button_focus_active_hover  = themes_path .. "images/caption/maximize_hover.png"
 theme.titlebar_maximized_button_focus_active_press  = themes_path .. "images/caption/maximize_focus.png"
 
-theme.wallpaper = themes_path .. "images/wallpapers/austronaut-dark.jpg"
+-- theme.wallpaper = themes_path .. "images/wallpapers/austronaut-dark.jpg"
 
 -- You can use your own layout icons like this:
 theme.layout_fairh      = themes_path .. "images/layouts/fairh.png"
@@ -106,12 +106,29 @@ theme.awesome_icon = themes_path .. "images/appmenu.png"
 
 -- Define the icon theme for application icons. If not set then the icons 
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
-theme.icon_theme = "Adwaita"
+theme.icon_theme = "Papirus-Dark"
 
 -- Useless Gap (blank space between clients)
 theme.useless_gap = dpi(10)
 
 -- Wibar Style
 theme.wibar_height = 35
+
+-- Notifications
+theme.notification_font = "Cantarell 9"
+theme.notification_bg = "#eeeeee" .. "46"
+theme.notification_fg = "#000000"
+theme.notification_border_width = 1
+theme.notification_border_color = blue .. "30"
+theme.notification_icon_size = 30
+theme.notification_width = 380
+theme.notification_height = 75
+theme.notification_shape = function(cr, width, height)
+    gears.shape.rounded_rect(cr, width, height, 5)
+end
+
+-- Menubar
+-- theme.menubar_fg_normal = "#ffffff"
+theme.menubar_bg_focus = "#000000" .. "50"
 
 return theme
