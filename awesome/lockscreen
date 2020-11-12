@@ -1,0 +1,5 @@
+#! /usr/bin/bash
+
+/usr/bin/setxkbmap us
+/usr/bin/setxkbmap -layout "us,gr" -option "grp:win_space_toggle"
+/usr/bin/i3lock -i ~/.config/awesome/images/wallpapers/aquarium.png

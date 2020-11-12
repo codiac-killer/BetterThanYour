@@ -24,4 +24,6 @@ fi
 
 run nitrogen --restore
 run picom --config  ~/.config/picom.conf -b --experimental-backends
-run setxkbmap -layout "us,gr" -option "grp:alt_shift_toggle"
+run setxkbmap -layout "us,gr" -option "grp:win_space_toggle"
+run lxqt-policykit-agent
+run xautolock -detectsleep -time 10 -locker "~/.config/awesome/lockscreen"

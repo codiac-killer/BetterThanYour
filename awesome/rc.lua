@@ -47,10 +47,10 @@ beautiful.init(require("theme"))
 
 -- This is used later as the default terminal and editor to run.
 -- Browsers --------------------------------------------------------------------
-browser = "brave"
+-- browser = "brave"
 -- browser = "google-chrome --force-dark-mode"
 -- browser = "opera"
--- browser = "firefox"
+browser = "firefox"
 --------------------------------------------------------------------------------
 -- Filemanager -----------------------------------------------------------------
 filemanager = "pcmanfm-qt"
@@ -362,7 +362,7 @@ awful.screen.connect_for_each_screen(function(s)
            volume = volume .. "X"
            
        end
-       widget:set_markup(" Volume: " .. volume)
+       widget:set_markup(" Vol: " .. volume)
     end
 
     update_volume(volume_widget)
@@ -375,6 +375,75 @@ awful.screen.connect_for_each_screen(function(s)
     -----------------------------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
+
+    -----------------------------------------------------------------------------------------------
+    -- Mystery Button -----------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------
+    -- local mystery_box = awful.popup {
+    --     widget = {
+    --         {
+    --             {
+    --                 text   = '',
+    --                 widget = wibox.widget.textbox
+    --             },
+    --             layout = wibox.layout.fixed.vertical,
+    --         },
+    --         margins = 10,
+    --         widget  = wibox.container.margin
+    --     },
+    --     border_color = '#00ff33',
+    --     border_width = 2,
+    --     placement    = awful.placement.top_right,
+    --     shape        = gears.shape.rounded_rect,
+    --     visible      = false,
+    -- }
+
+
+    -- local mystery_button = awful.widget.button()
+    -- local mystery_button = wibox.widget{
+    --     markup = 'Now Playing ♬',
+    --     align  = 'center',
+    --     valign = 'center',
+    --     widget = wibox.widget.textbox
+    -- }
+    -- mystery_button:buttons(gears.table.join(
+    --     mystery_button:buttons(),
+    --         awful.button({}, 1, nil, function ()
+    --             mystery_box.visible = not mystery_box.visible
+    --         end)
+    -- ))
+
+    function update_music(widget)
+       local fd = io.popen("playerctl metadata title")
+       local title = fd:read("*all")
+       fd:close()
+
+       if title == '' then
+       -- When there is no track playing
+           title = 'No track Playing'
+       end
+       widget:set_markup(title)
+    end
+
+
+    local media_icon = wibox.widget.textbox("♬: ")
+    local media_text = wibox.widget.textbox()
+
+    local media_box = wibox.widget {
+       layout = wibox.container.scroll.horizontal,
+       max_size = 150,
+       step_function = wibox.container.scroll.step_functions.linear_increase,
+       speed = 13,
+       extra_space = 30,
+       {
+           widget = media_text
+       }
+    }
+
+    update_music(media_text)
+
+    -- mytimer = timer({ timeout = 0.2 })
+    mytimer:connect_signal("timeout", function () update_music(media_text) end)
 
     -----------------------------------------------------------------------------------------------
     -- Create the wibox ---------------------------------------------------------------------------
@@ -397,6 +466,9 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             s.systray_widget,
+            separator,
+            media_icon,
+            media_box,
             separator,
             mykeyboardlayout,
             separator,
@@ -479,9 +551,9 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
 
-    awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)                 end,
+    awful.key({ modkey,           }, "=",     function () awful.tag.incmwfact( 0.05)                 end,
               {description = "increase master width factor", group = "layout"}),
-    awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)                 end,
+    awful.key({ modkey,           }, "-",     function () awful.tag.incmwfact(-0.05)                 end,
               {description = "decrease master width factor", group = "layout"}),
     awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1, nil, true)        end,
               {description = "increase the number of master clients", group = "layout"}),
@@ -499,8 +571,9 @@ globalkeys = gears.table.join(
               {description = "launch filemanager", group = "launcher"}),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                       end,
               {description = "select previous", group = "layout"}),
-    awful.key({                   }, "Print", function () awful.spawn.with_shell("sleep 0.1 && /usr/bin/i3-scrot -d")   end,
-              {description = "capture a screenshot", group = "screenshot"}),
+     awful.key({ }, "Print", function () awful.util.spawn("ksnapshot") end),
+    awful.key({                   }, "Print", function () awful.spawn.with_shell("sleep 0.1 && /usr/bin/maim --select ~/Pictures/(date).png")   end,
+              {description = "capture a screenshot of selection", group = "screenshot"}),
     awful.key({"Control"          }, "Print", function () awful.spawn.with_shell("sleep 0.1 && /usr/bin/i3-scrot -w")   end,
               {description = "capture a screenshot of active window", group = "screenshot"}),
     awful.key({"Shift"            }, "Print", function () awful.spawn.with_shell("sleep 0.1 && /usr/bin/i3-scrot -s")   end,
@@ -613,11 +686,11 @@ clientkeys = gears.table.join(
             awful.util.spawn("playerctl next", false) 
         end, 
         {description = "Previous with media keys", group = "media"}),
-     awful.key({modkey,           }, "a", 
+     awful.key({modkey,           }, "l", 
         function () 
-            awful.util.spawn("rofi -show drun") 
+            awful.util.spawn("~/.config/awesome/lockscreen")
         end, 
-        {description = "Call application launcher", group = "Launcher"})
+        {description = "Lock Screen", group = "System"})
 )
 
 -- Bind all key numbers to tags.
@@ -731,7 +804,7 @@ awful.rules.rules = {
 
     -- Add titlebars to normal clients and dialogs
     { rule_any = {type = { "normal", "dialog" } },
-      except_any = { class = { "Code", "Google-chrome", "Opera" } },
+      except_any = { class = { "Code", "Google-chrome", "Opera", "firefox" } },
       properties = { titlebars_enabled = true }
     },
 	
@@ -746,7 +819,7 @@ awful.rules.rules = {
     { rule = { class = "gwenview" }, properties = { screen = 1, tag = "Media" } },  
     { rule = { class = "vlc" }, properties = { screen = 1, tag = "Media" } },  
     { rule = { class = "Gimp-2.10" }, properties = { screen = 1, tag = "Media" } }, 
-    { rule = { class = "TigerVNC Viewer" }, properties = { screen = 1, tag = "Desktops" } }, 
+    { rule = { class = "Vncviewer" }, properties = { screen = 1, tag = "Desktops" } }, 
 
 }
 -- }}}

@@ -8,12 +8,13 @@ theme = {}
 
 theme.font              = "Cantarell Bold 11"
 
-theme.bg_normal   = "#0d1a26" .. "00"
+-- theme.bg_normal   = "#0d1a26" .. "00"
+theme.bg_normal   = "#000000" .. "33"
 theme.bg_focus    = "#222B2E" .. "00"
 theme.bg_urgent   = "#000000" .. "00"
 theme.bg_minimize = "#101010" .. "00"
 theme.bg_wibar 	  = "#000000" .. "99"
-theme.bg_systray  = "#0d1a26" .. "00"
+theme.bg_systray  = "#555555" .. "00"
 
 theme.fg_normal   = "#ffffff"
 theme.fg_focus    = "#ffffff"
@@ -46,8 +47,9 @@ theme.hotkeys_modifiers_fg = "#2EB398"
 -- Example:
 
 -- Display the taglist squares
-theme.taglist_squares_sel   = themes_path .. "images/tag_buttons/active_filled.png"
+theme.taglist_squares_sel   = themes_path .. "images/tag_buttons/selected_light.png"
 theme.taglist_squares_unsel = themes_path .. "images/tag_buttons/inactive_filled.png"
+theme.taglist_squares_sel_empty = themes_path .. "images/tag_buttons/selected_light.png"
 
 -- Variables set for theming the menu:
 -- menu_[bg|fg]_[normal|focus]
@@ -83,6 +85,7 @@ theme.titlebar_maximized_button_focus_active_hover  = themes_path .. "images/cap
 theme.titlebar_maximized_button_focus_active_press  = themes_path .. "images/caption/maximize_focus.png"
 
 -- theme.wallpaper = themes_path .. "images/wallpapers/austronaut-dark.jpg"
+theme.lock_image = themes_path .. "images/wallpapers/aquarium.png"
 
 -- You can use your own layout icons like this:
 theme.layout_fairh      = themes_path .. "images/layouts/fairh.png"
