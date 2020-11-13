@@ -19,6 +19,7 @@ It is still work in progress.
   * i3lock    : to have lock screen
   * qt5ct     : to set Qt themes
   * nitrogen  : to set wallpaper
+  * Cantrella, Cascadia fonts
 
 Obviously you can replace some of these programs with the ones of your choice but have to modify the rc file accordingly
 

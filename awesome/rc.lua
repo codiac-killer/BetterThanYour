@@ -75,13 +75,13 @@ awful.layout.layouts = {
     awful.layout.suit.max,
     awful.layout.suit.floating,
     --awful.layout.suit.tile.left,
-    awful.layout.suit.tile.bottom,
+    -- awful.layout.suit.tile.bottom,
     -- awful.layout.suit.tile.top,
-    awful.layout.suit.fair.horizontal,
+    -- awful.layout.suit.fair.horizontal,
     -- awful.layout.suit.spiral,
     -- awful.layout.suit.spiral.dwindle,
     -- awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier,
+    -- awful.layout.suit.magnifier,
     -- awful.layout.suit.corner.nw,
     -- awful.layout.suit.corner.ne,
     -- awful.layout.suit.corner.sw,
@@ -100,6 +100,16 @@ local function client_menu_toggle_fn()
             instance = awful.menu.clients({ theme = { width = 250 } })
         end
     end
+end
+
+shape_hexagon = function(cr, width, height)
+    cr:move_to(height/4,0)
+    cr:line_to(width,0)
+    cr:line_to(width,height - height/4)
+    cr:line_to(width - height/4,height)
+    cr:line_to(0,height)
+    cr:line_to(0,height/4)
+    cr:close_path()
 end
 -- }}}
 
@@ -261,19 +271,14 @@ awful.screen.connect_for_each_screen(function(s)
         screen  = s,
         filter  = awful.widget.taglist.filter.all,
         style   = {
-            -- shape = function(cr,w,h)
-            --     gears.shape.partially_rounded_rect(cr, w, h, true, true, false, false, 10)
-            -- end
-            shape = function(cr, width, height)
-                cr:move_to(height/4,0)
-                cr:line_to(width,0)
-                cr:line_to(width,height - height/4)
-                cr:line_to(width - height/4,height)
-                cr:line_to(0,height)
-                cr:line_to(0,height/4)
-                cr:close_path()
-            end
+            shape_border_width = 1,
+	        shape_border_color = '#444444',
+            shape = shape_hexagon
         },
+     --    layout   = {
+	    --     spacing = 2,
+	    --     layout  = wibox.layout.flex.horizontal
+	    -- },
         widget_template = {
             {
                 {
@@ -314,11 +319,11 @@ awful.screen.connect_for_each_screen(function(s)
             create_callback = function(self, c3, index, objects) --luacheck: no unused args
                 -- self:get_children_by_id('index_role')[1].markup = '<b> '..index..' </b>'
                 self:connect_signal('mouse::enter', function()
-                    if self.bg ~= '#0066ff66' then
+                    if self.bg ~= '#0088ff' then
                         self.backup     = self.bg
                         self.has_backup = true
                     end
-                    self.bg = '#0066ff66'
+                    self.bg = '#0088ff'
                 end)
                 self:connect_signal('mouse::leave', function()
                     if self.has_backup then self.bg = self.backup end
@@ -333,7 +338,45 @@ awful.screen.connect_for_each_screen(function(s)
     -----------------------------------------------------------------------------------------------
     -- Create a tasklist widget -------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
-    s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
+    -- s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
+    s.mytasklist = awful.widget.tasklist {
+	    screen   = s,
+	    filter   = awful.widget.tasklist.filter.currenttags,
+	    buttons  = tasklist_buttons,
+	    style    = {
+	        shape_border_width = 1,
+	        shape_border_color = '#333333',
+	        shape  = shape_hexagon,
+	    },
+	    layout   = {
+	        spacing = 5,
+	        layout  = wibox.layout.flex.horizontal
+	    },
+	    widget_template = {
+	        {
+	            {
+	                {
+	                    {
+	                        id     = 'icon_role',
+	                        widget = wibox.widget.imagebox,
+	                    },
+	                    margins = 5,
+	                    widget  = wibox.container.margin,
+	                },
+	                {
+	                    id     = 'text_role',
+	                    widget = wibox.widget.textbox,
+	                },
+	                layout = wibox.layout.fixed.horizontal,
+	            },
+	            left  = 10,
+	            right = 10,
+	            widget = wibox.container.margin
+	        },
+	        id     = 'background_role',
+	        widget = wibox.container.background,
+	    },
+	}
     -----------------------------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
@@ -377,41 +420,8 @@ awful.screen.connect_for_each_screen(function(s)
     -----------------------------------------------------------------------------------------------
 
     -----------------------------------------------------------------------------------------------
-    -- Mystery Button -----------------------------------------------------------------------
+    -- Mystery Button -----------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
-    -- local mystery_box = awful.popup {
-    --     widget = {
-    --         {
-    --             {
-    --                 text   = '',
-    --                 widget = wibox.widget.textbox
-    --             },
-    --             layout = wibox.layout.fixed.vertical,
-    --         },
-    --         margins = 10,
-    --         widget  = wibox.container.margin
-    --     },
-    --     border_color = '#00ff33',
-    --     border_width = 2,
-    --     placement    = awful.placement.top_right,
-    --     shape        = gears.shape.rounded_rect,
-    --     visible      = false,
-    -- }
-
-
-    -- local mystery_button = awful.widget.button()
-    -- local mystery_button = wibox.widget{
-    --     markup = 'Now Playing ♬',
-    --     align  = 'center',
-    --     valign = 'center',
-    --     widget = wibox.widget.textbox
-    -- }
-    -- mystery_button:buttons(gears.table.join(
-    --     mystery_button:buttons(),
-    --         awful.button({}, 1, nil, function ()
-    --             mystery_box.visible = not mystery_box.visible
-    --         end)
-    -- ))
 
     function update_music(widget)
        local fd = io.popen("playerctl metadata title")
@@ -465,6 +475,7 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
+            spacer,
             s.systray_widget,
             separator,
             media_icon,
