@@ -74,7 +74,7 @@ awful.layout.layouts = {
     awful.layout.suit.fair,
     awful.layout.suit.max,
     awful.layout.suit.floating,
-    --awful.layout.suit.tile.left,
+    -- awful.layout.suit.tile.left,
     -- awful.layout.suit.tile.bottom,
     -- awful.layout.suit.tile.top,
     -- awful.layout.suit.fair.horizontal,
@@ -143,9 +143,6 @@ mymainmenu = freedesktop.menu.build({
         -- other triads can be put here
     }
 })
-
--- mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
---                                      menu = mymainmenu })
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
@@ -264,53 +261,72 @@ awful.screen.connect_for_each_screen(function(s)
     -----------------------------------------------------------------------------------------------
 
     -----------------------------------------------------------------------------------------------
+    -- Shutdown menu ------------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------
+    shutdownmenu = awful.menu({
+        -- icon_size = 32,
+        item ={
+          { "log out", function() awesome.quit() end, menubar.utils.lookup_icon("system-log-out") },
+          { "suspend", "systemctl suspend", menubar.utils.lookup_icon("system-suspend") },
+          { "hibernate", "systemctl hibernate", menubar.utils.lookup_icon("system-suspend-hibernate") },
+          { "reboot", "systemctl reboot", menubar.utils.lookup_icon("system-reboot") },
+          { "shutdown", "poweroff", menubar.utils.lookup_icon("system-shutdown") }
+        }
+    })
+
+    shutdownmenu_button = awful.widget.launcher({ image = menubar.utils.lookup_icon("system-shutdown"), menu = shutdownmenu })
+    -----------------------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------------
+
+    -----------------------------------------------------------------------------------------------
     -- Create a taglist widget --------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
 
-    s.mytaglist = awful.widget.taglist {
+    local taglist_pure_widget = awful.widget.taglist {
         screen  = s,
         filter  = awful.widget.taglist.filter.all,
         style   = {
             shape_border_width = 1,
-	        shape_border_color = '#444444',
+            shape_border_color = '#444444',
             shape = shape_hexagon
         },
-     --    layout   = {
-	    --     spacing = 2,
-	    --     layout  = wibox.layout.flex.horizontal
-	    -- },
+        layout   = {
+            spacing = 5,
+            layout  = wibox.layout.fixed.horizontal
+            -- layout  = wibox.layout.flex.horizontal
+        },
         widget_template = {
             {
                 {
-                    {
-                        {
-                            -- {
-                            --     id     = 'index_role',
-                            --     widget = wibox.widget.textbox,
-                            -- },
-                            -- margins = 4,
-                            widget  = wibox.container.margin,
-                        },
-                        -- bg     = '#dddddd',
-                        -- shape  = gears.shape.circle,
-                        widget = wibox.container.background,
-                    },
-                    {
-                        {
-                            id     = 'icon_role',
-                            widget = wibox.widget.imagebox,
-                        },
-                        margins = 2,
-                        widget  = wibox.container.margin,
-                    },
+                    -- {
+                    --     {
+                    --         -- {
+                    --         --     id     = 'index_role',
+                    --         --     widget = wibox.widget.textbox,
+                    --         -- },
+                    --         -- margins = 10,
+                    --         widget  = wibox.container.margin,
+                    --     },
+                    --     -- bg     = '#dddddd',
+                    --     -- shape  = gears.shape.circle,
+                    --     widget = wibox.container.background,
+                    -- },
+                    -- {
+                    --     {
+                    --         id     = 'icon_role',
+                    --         widget = wibox.widget.imagebox,
+                    --     },
+                    --     -- margins = 2,
+                    --     widget  = wibox.container.margin,
+                    -- },
                     {
                         id     = 'text_role',
                         widget = wibox.widget.textbox,
                     },
                     layout = wibox.layout.fixed.horizontal,
                 },
-                left  = 18,
-                right = 18,
+                left  = 10,
+                right = 10,
                 widget = wibox.container.margin
             },
             id     = 'background_role',
@@ -332,52 +348,57 @@ awful.screen.connect_for_each_screen(function(s)
         },
         buttons = taglist_buttons
     }
+
+    local size_cont_taglist =  wibox.container.constraint(taglist_pure_widget, 'exact', nil, 30)
+    s.taglist = wibox.container.place(size_cont_taglist, 'center', 'center')
     -----------------------------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
     
     -----------------------------------------------------------------------------------------------
     -- Create a tasklist widget -------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
-    -- s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
-    s.mytasklist = awful.widget.tasklist {
-	    screen   = s,
-	    filter   = awful.widget.tasklist.filter.currenttags,
-	    buttons  = tasklist_buttons,
-	    style    = {
-	        shape_border_width = 1,
-	        shape_border_color = '#333333',
-	        shape  = shape_hexagon,
-	    },
-	    layout   = {
-	        spacing = 5,
-	        layout  = wibox.layout.flex.horizontal
-	    },
-	    widget_template = {
-	        {
-	            {
-	                {
-	                    {
-	                        id     = 'icon_role',
-	                        widget = wibox.widget.imagebox,
-	                    },
-	                    margins = 5,
-	                    widget  = wibox.container.margin,
-	                },
-	                {
-	                    id     = 'text_role',
-	                    widget = wibox.widget.textbox,
-	                },
-	                layout = wibox.layout.fixed.horizontal,
-	            },
-	            left  = 10,
-	            right = 10,
-	            widget = wibox.container.margin
-	        },
-	        id     = 'background_role',
-	        widget = wibox.container.background,
-	    },
-	}
-    -----------------------------------------------------------------------------------------------
+    -- local tasklist_pure_widget = awful.widget.tasklist {
+    s.tasklist = awful.widget.tasklist {
+  	    screen   = s,
+  	    filter   = awful.widget.tasklist.filter.currenttags,
+  	    buttons  = tasklist_buttons,
+  	    style    = {
+  	        -- shape_border_width = 1,
+  	        -- shape_border_color = '#333333',
+  	        -- shape  = shape_hexagon,
+  	    },
+  	    layout   = {
+  	        -- spacing = 5,
+            -- layout  = wibox.layout.flex.horizontal
+            layout  = wibox.layout.fixed.horizontal
+  	    },
+  	    widget_template = {
+  	        {
+  	            {
+  	                {
+  	                    {
+  	                        id     = 'icon_role',
+  	                        widget = wibox.widget.imagebox,
+  	                    },
+  	                    margins = 5,
+  	                    widget  = wibox.container.margin,
+  	                },
+  	                -- {
+  	                --     id     = 'text_role',
+  	                --     widget = wibox.widget.textbox,
+  	                -- },
+  	                layout = wibox.layout.fixed.horizontal,
+  	            },
+  	            left  = 10,
+  	            right = 10,
+  	            widget = wibox.container.margin
+  	        },
+  	        id     = 'background_role',
+  	        widget = wibox.container.background,
+  	    },
+  	}
+    -- local size_cont_tasklist =  wibox.container.constraint(tasklist_pure_widget, 'exact', nil, 30)
+    -- s.tasklist = wibox.container.place(size_cont_tasklist, 'center', 'left')
     -----------------------------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
 
@@ -415,7 +436,6 @@ awful.screen.connect_for_each_screen(function(s)
     mytimer:start()
     
     -- s.volume_widget = volume_widget
-    -----------------------------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
 
@@ -458,7 +478,7 @@ awful.screen.connect_for_each_screen(function(s)
     -----------------------------------------------------------------------------------------------
     -- Create the wibox ---------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
-    s.mywibox = awful.wibar({ position = "top", screen = s, bg = beautiful.bg_wibar }) 
+    s.mywibox = awful.wibar({ position = "bottom", screen = s, bg = beautiful.bg_wibar }) 
     
     -----------------------------------------------------------------------------------------------
     -- Add widgets to the wibox -------------------------------------------------------------------
@@ -468,11 +488,11 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
 --             mylauncher,
-            s.mytaglist,
-            s.mypromptbox,
+            s.taglist,
+            -- s.mypromptbox,
             separator,
         },
-        s.mytasklist, -- Middle widget
+        s.tasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             spacer,
@@ -488,6 +508,7 @@ awful.screen.connect_for_each_screen(function(s)
             mytextclock,
             separator,
             s.layout_widget,
+            shutdownmenu_button,
             spacer
         },
     }
@@ -500,9 +521,9 @@ end)
 -- {{{ Mouse bindings
 root.buttons(gears.table.join(
 	awful.button({ }, 1, function () mymainmenu:hide() end),
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
+    awful.button({ }, 3, function () mymainmenu:toggle() end)
+    -- awful.button({ }, 4, awful.tag.viewnext),
+    -- awful.button({ }, 5, awful.tag.viewprev)
 ))
 -- }}}
 
@@ -582,13 +603,13 @@ globalkeys = gears.table.join(
               {description = "launch filemanager", group = "launcher"}),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                       end,
               {description = "select previous", group = "layout"}),
-     awful.key({ }, "Print", function () awful.util.spawn("ksnapshot") end),
-    awful.key({                   }, "Print", function () awful.spawn.with_shell("sleep 0.1 && /usr/bin/maim --select ~/Pictures/(date).png")   end,
+     -- awful.key({ }, "Print", function () awful.util.spawn("ksnapshot") end),
+    awful.key({                   }, "Print", function () awful.spawn.with_shell("sleep 0.1 && /usr/bin/maim -B --select ~/Pictures/screenshots/$(date +%F_%H-%M-%S).png")   end,
               {description = "capture a screenshot of selection", group = "screenshot"}),
-    awful.key({"Control"          }, "Print", function () awful.spawn.with_shell("sleep 0.1 && /usr/bin/i3-scrot -w")   end,
+    awful.key({"Control"          }, "Print", function () awful.spawn.with_shell("sleep 0.1 && /usr/bin/maim -i $(xdotool getactivewindow) -B ~/Pictures/screenshots/$(date +%F_%H-%M-%S).png")   end,
               {description = "capture a screenshot of active window", group = "screenshot"}),
-    awful.key({"Shift"            }, "Print", function () awful.spawn.with_shell("sleep 0.1 && /usr/bin/i3-scrot -s")   end,
-              {description = "capture a screenshot of selection", group = "screenshot"}),
+    awful.key({"Shift"            }, "Print", function () awful.spawn.with_shell("sleep 0.1 && /usr/bin/maim --hidecursor ~/Pictures/screenshots/$(date +%F_%H-%M-%S).png")   end,
+              {description = "capture a screenshot of whole screen", group = "screenshot"}),
 
     awful.key({ modkey, "Control" }, "n",
               function ()
@@ -815,7 +836,7 @@ awful.rules.rules = {
 
     -- Add titlebars to normal clients and dialogs
     { rule_any = {type = { "normal", "dialog" } },
-      except_any = { class = { "Code", "Google-chrome", "Opera", "firefox" } },
+      except_any = { class = { "Code", "Google-chrome", "Opera", "firefox", "Brave-browser" } },
       properties = { titlebars_enabled = true }
     },
 	

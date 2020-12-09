@@ -14,7 +14,7 @@ theme.bg_focus    = "#222B2E" .. "00"
 theme.bg_urgent   = "#000000" .. "00"
 theme.bg_minimize = "#101010" .. "00"
 theme.bg_wibar 	  = "#000000" .. "99"
-theme.bg_systray  = "#555555" .. "00"
+theme.bg_systray  = "#151525"
 
 theme.fg_normal   = "#ffffff"
 theme.fg_focus    = "#ffffff"
@@ -36,6 +36,9 @@ theme.titlebar_bg_focus = "#000000" .. "a6"
 theme.titlebar_bg_normal = "#000000" .. "a6"
 
 theme.hotkeys_modifiers_fg = "#2EB398"
+
+-- Menubar
+theme.menubar_bg_focus = "#000000" .. "50"
 
 -- There are other variable sets
 -- overriding the default one when
@@ -84,7 +87,6 @@ theme.titlebar_maximized_button_focus_active    = themes_path .. "images/caption
 theme.titlebar_maximized_button_focus_active_hover  = themes_path .. "images/caption/maximize_hover.png"
 theme.titlebar_maximized_button_focus_active_press  = themes_path .. "images/caption/maximize_focus.png"
 
--- theme.wallpaper = themes_path .. "images/wallpapers/austronaut-dark.jpg"
 theme.lock_image = themes_path .. "images/wallpapers/aquarium.png"
 
 -- You can use your own layout icons like this:
@@ -112,15 +114,15 @@ theme.awesome_icon = themes_path .. "images/appmenu.png"
 theme.icon_theme = "Papirus-Dark"
 
 -- Useless Gap (blank space between clients)
-theme.useless_gap = dpi(10)
+theme.useless_gap = dpi(7)
 
 -- Wibar Style
-theme.wibar_height = 35
+theme.wibar_height = 45
 
 -- Notifications
 theme.notification_font = "Cantarell 9"
-theme.notification_bg = "#eeeeee" .. "46"
-theme.notification_fg = "#000000"
+theme.notification_bg = "#333333" .. "46"
+theme.notification_fg = "#ffffff"
 theme.notification_border_width = 1
 theme.notification_border_color = blue .. "30"
 theme.notification_icon_size = 30
@@ -130,8 +132,5 @@ theme.notification_shape = function(cr, width, height)
     gears.shape.rounded_rect(cr, width, height, 5)
 end
 
--- Menubar
--- theme.menubar_fg_normal = "#ffffff"
-theme.menubar_bg_focus = "#000000" .. "50"
 
 return theme
