@@ -6,36 +6,39 @@ local blue = "#0066ff"
 
 theme = {}
 
-theme.font              = "Cantarell Bold 11"
+theme.font         = "Cantarell Bold 11"
+theme.taglist_font = "JoyPixels 10"
 
 -- theme.bg_normal   = "#0d1a26" .. "00"
-theme.bg_normal   = "#000000" .. "33"
+theme.bg_normal   = "#000000" .. "56"
 theme.bg_focus    = "#222B2E" .. "00"
-theme.bg_urgent   = "#000000" .. "00"
+-- theme.bg_urgent   = "#000000" .. "00"
 theme.bg_minimize = "#101010" .. "00"
-theme.bg_wibar 	  = "#000000" .. "99"
-theme.bg_systray  = "#151525"
+theme.bg_wibar 	  = "#141414" .. "e6"
+theme.bg_systray  = "#141414"
 
 theme.fg_normal   = "#ffffff"
 theme.fg_focus    = "#ffffff"
 theme.fg_urgent   = "#ff0000"
 theme.fg_minimize = "#ffffff"
 
-theme.taglist_bg_focus = "#0d1a26" .. "50"
+theme.taglist_bg_focus = "#999999" .. "50"
 
-theme.tasklist_bg_focus = "#0d1a26" .. "50"
 theme.tasklist_bg_normal   = "#8aa1a8" .. "10"
+theme.tasklist_bg_focus = "#0d1a26" .. "50"
 
-theme.border_width  = 1
-theme.border_normal = "#000000"
-theme.border_focus  = blue .. "30"
-theme.border_marked = blue .. "30"
+theme.border_width  = 4
+theme.border_normal = "#000000" .. "d6"
+theme.border_marked = "#000000" .. "d6"
+theme.border_focus  = theme.border_marked
 
 theme.titlebar_size = dpi(34)
-theme.titlebar_bg_focus = "#000000" .. "a6"
-theme.titlebar_bg_normal = "#000000" .. "a6"
+theme.titlebar_bg_focus = "#000000" .. "d6"
+theme.titlebar_bg_normal = "#000000" .. "d6"
 
 theme.hotkeys_modifiers_fg = "#2EB398"
+
+theme.taglist_border = "#000000" .. "50"
 
 -- Menubar
 theme.menubar_bg_focus = "#000000" .. "50"
@@ -50,9 +53,11 @@ theme.menubar_bg_focus = "#000000" .. "50"
 -- Example:
 
 -- Display the taglist squares
-theme.taglist_squares_sel   = themes_path .. "images/tag_buttons/selected_light.png"
-theme.taglist_squares_unsel = themes_path .. "images/tag_buttons/inactive_filled.png"
-theme.taglist_squares_sel_empty = themes_path .. "images/tag_buttons/selected_light.png"
+theme.taglist_squares_sel   = themes_path .. "images/tag_buttons/squarefw.png"
+theme.taglist_squares_unsel = themes_path .. "images/tag_buttons/squarew.png"
+theme.taglist_shape_border_color_urgent = "#ff0000"
+theme.taglist_shape_border_width_urgent	= 2
+-- theme.taglist_squares_sel_empty = themes_path .. "images/tag_buttons/selected_light.png"
 
 -- Variables set for theming the menu:
 -- menu_[bg|fg]_[normal|focus]
@@ -86,8 +91,7 @@ theme.titlebar_maximized_button_normal_active   = themes_path .. "images/caption
 theme.titlebar_maximized_button_focus_active    = themes_path .. "images/caption/maximize_pressed.png"
 theme.titlebar_maximized_button_focus_active_hover  = themes_path .. "images/caption/maximize_hover.png"
 theme.titlebar_maximized_button_focus_active_press  = themes_path .. "images/caption/maximize_focus.png"
-
-theme.lock_image = themes_path .. "images/wallpapers/aquarium.png"
+-- theme.lock_image = themes_path .. "images/wallpapers/aquarium.png"
 
 -- You can use your own layout icons like this:
 theme.layout_fairh      = themes_path .. "images/layouts/fairh.png"
@@ -121,16 +125,16 @@ theme.wibar_height = 45
 
 -- Notifications
 theme.notification_font = "Cantarell 9"
-theme.notification_bg = "#333333" .. "46"
-theme.notification_fg = "#ffffff"
+theme.notification_bg = "#dfdfdf"
+theme.notification_fg = "#777777"
 theme.notification_border_width = 1
-theme.notification_border_color = blue .. "30"
+theme.notification_border_color = "#000000"
 theme.notification_icon_size = 30
 theme.notification_width = 380
 theme.notification_height = 75
-theme.notification_shape = function(cr, width, height)
-    gears.shape.rounded_rect(cr, width, height, 5)
-end
+-- theme.notification_shape = function(cr, width, height)
+--     gears.shape.rounded_rect(cr, width, height, 5)
+-- end
 
 
 return theme

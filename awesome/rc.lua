@@ -47,32 +47,27 @@ beautiful.init(require("theme"))
 
 -- This is used later as the default terminal and editor to run.
 -- Browsers --------------------------------------------------------------------
--- browser = "brave"
--- browser = "google-chrome --force-dark-mode"
--- browser = "opera"
-browser = "firefox"
+browser = "exo-open --launch WebBrowser" or "firefox"
 --------------------------------------------------------------------------------
 -- Filemanager -----------------------------------------------------------------
-filemanager = "pcmanfm-qt"
+filemanager = "exo-open --launch FileManager" or "thunar"
 --------------------------------------------------------------------------------
 -- Text Editor -----------------------------------------------------------------
 gui_editor = "subl"
 --------------------------------------------------------------------------------
 -- Terminal Emulator -----------------------------------------------------------
-terminal = "alacritty"
+terminal = os.getenv("TERMINAL") or "alacritty"
 --------------------------------------------------------------------------------
 
 -- Default modkey.
--- Usually, Mod4 is the key with a logo between Control and Alt.
--- If you do not like this or do not have such a key,
--- I suggest you to remap Mod4 to another key using xmodmap or other tools.
--- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
+
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
     awful.layout.suit.tile,
     awful.layout.suit.fair,
-    awful.layout.suit.max,
+    -- awful.layout.suit.max,
+    awful.layout.suit.max.fullscreen,
     awful.layout.suit.floating,
     -- awful.layout.suit.tile.left,
     -- awful.layout.suit.tile.bottom,
@@ -80,7 +75,6 @@ awful.layout.layouts = {
     -- awful.layout.suit.fair.horizontal,
     -- awful.layout.suit.spiral,
     -- awful.layout.suit.spiral.dwindle,
-    -- awful.layout.suit.max.fullscreen,
     -- awful.layout.suit.magnifier,
     -- awful.layout.suit.corner.nw,
     -- awful.layout.suit.corner.ne,
@@ -120,6 +114,7 @@ myawesomemenu = {
     { "hotkeys", function() return false, hotkeys_popup.show_help end, menubar.utils.lookup_icon("preferences-desktop-keyboard-shortcuts") },
     { "manual", terminal .. " -e man awesome", menubar.utils.lookup_icon("system-help") },
     { "edit config", gui_editor .. " " .. awesome.conffile,  menubar.utils.lookup_icon("accessories-text-editor") },
+    { "edit theme", gui_editor .. " ~/.config/awesome/theme.lua",  menubar.utils.lookup_icon("accessories-text-editor") },
     { "restart", awesome.restart, menubar.utils.lookup_icon("system-restart") }
 }
 myexitmenu = {
@@ -150,10 +145,10 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 -- {{{ Wibar
 -- Create a textclock widget
--- mytextclock = wibox.widget.textclock("%H:%M ")
 local mytextclock = wibox.widget.textclock()
-local month_calendar = awful.widget.calendar_popup.month()
-month_calendar:attach( mytextclock, "tr" )
+local month_calendar = awful.widget.calendar_popup.month({bg = "#2f2f2fc6"})
+month_calendar:attach( mytextclock, "br" )
+
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
 
@@ -218,15 +213,21 @@ local function set_wallpaper(s)
     end
 end
 
--- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
-screen.connect_signal("property::geometry", set_wallpaper)
+-- Functions to update active window indicators
+local function set_tasklist_underline(tasklist_icon, client, index, objects)
+    if client:isvisible() then
+        tasklist_icon:get_children_by_id("underline")[1].bg = "#1e90ff"
+    else 
+        tasklist_icon:get_children_by_id("underline")[1].bg = "#212121"
+    end
+end
 
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
-    set_wallpaper(s)
+    -- set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "Web", "Code", "Media", "Desktops", "System" }, s, awful.layout.layouts[1])
+    awful.tag({ "🌍", "📜", "⏯️", "📦", "⚙" }, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -261,20 +262,13 @@ awful.screen.connect_for_each_screen(function(s)
     -----------------------------------------------------------------------------------------------
 
     -----------------------------------------------------------------------------------------------
-    -- Shutdown menu ------------------------------------------------------------------------------------
+    -- Shutdown button ----------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
-    shutdownmenu = awful.menu({
-        -- icon_size = 32,
-        item ={
-          { "log out", function() awesome.quit() end, menubar.utils.lookup_icon("system-log-out") },
-          { "suspend", "systemctl suspend", menubar.utils.lookup_icon("system-suspend") },
-          { "hibernate", "systemctl hibernate", menubar.utils.lookup_icon("system-suspend-hibernate") },
-          { "reboot", "systemctl reboot", menubar.utils.lookup_icon("system-reboot") },
-          { "shutdown", "poweroff", menubar.utils.lookup_icon("system-shutdown") }
-        }
-    })
-
-    shutdownmenu_button = awful.widget.launcher({ image = menubar.utils.lookup_icon("system-shutdown"), menu = shutdownmenu })
+    local logout_button = awful.widget.launcher({ image = menubar.utils.lookup_icon("system-shutdown"), command = 'oblogout' })
+    -- Use container to adjust widgets size
+    local size_cont_logout = wibox.container.constraint(logout_button, 'exact', 35, 35)
+    -- Use container to adjust widgets alignment
+    s.logout = wibox.container.place(size_cont_logout, 'center', 'center')
     -----------------------------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
 
@@ -287,7 +281,7 @@ awful.screen.connect_for_each_screen(function(s)
         filter  = awful.widget.taglist.filter.all,
         style   = {
             shape_border_width = 1,
-            shape_border_color = '#444444',
+            shape_border_color = beautiful.taglist_border,
             shape = shape_hexagon
         },
         layout   = {
@@ -298,27 +292,6 @@ awful.screen.connect_for_each_screen(function(s)
         widget_template = {
             {
                 {
-                    -- {
-                    --     {
-                    --         -- {
-                    --         --     id     = 'index_role',
-                    --         --     widget = wibox.widget.textbox,
-                    --         -- },
-                    --         -- margins = 10,
-                    --         widget  = wibox.container.margin,
-                    --     },
-                    --     -- bg     = '#dddddd',
-                    --     -- shape  = gears.shape.circle,
-                    --     widget = wibox.container.background,
-                    -- },
-                    -- {
-                    --     {
-                    --         id     = 'icon_role',
-                    --         widget = wibox.widget.imagebox,
-                    --     },
-                    --     -- margins = 2,
-                    --     widget  = wibox.container.margin,
-                    -- },
                     {
                         id     = 'text_role',
                         widget = wibox.widget.textbox,
@@ -332,18 +305,14 @@ awful.screen.connect_for_each_screen(function(s)
             id     = 'background_role',
             widget = wibox.container.background,
             -- Add support for hover colors and an index label
-            create_callback = function(self, c3, index, objects) --luacheck: no unused args
-                -- self:get_children_by_id('index_role')[1].markup = '<b> '..index..' </b>'
+            create_callback = function(self, tag, index, objects) --luacheck: no unused args
                 self:connect_signal('mouse::enter', function()
-                    if self.bg ~= '#0088ff' then
-                        self.backup     = self.bg
-                        self.has_backup = true
-                    end
-                    self.bg = '#0088ff'
+                    self.bg = '#1e90ff'
                 end)
                 self:connect_signal('mouse::leave', function()
-                    if self.has_backup then self.bg = self.backup end
+                    if tag.selected then self.bg = beautiful.taglist_bg_focus else self.bg = "#00000000" end
                 end)
+		
             end,
         },
         buttons = taglist_buttons
@@ -363,39 +332,68 @@ awful.screen.connect_for_each_screen(function(s)
   	    filter   = awful.widget.tasklist.filter.currenttags,
   	    buttons  = tasklist_buttons,
   	    style    = {
-  	        -- shape_border_width = 1,
-  	        -- shape_border_color = '#333333',
-  	        -- shape  = shape_hexagon,
   	    },
   	    layout   = {
   	        -- spacing = 5,
             -- layout  = wibox.layout.flex.horizontal
             layout  = wibox.layout.fixed.horizontal
   	    },
-  	    widget_template = {
-  	        {
-  	            {
-  	                {
-  	                    {
-  	                        id     = 'icon_role',
-  	                        widget = wibox.widget.imagebox,
-  	                    },
-  	                    margins = 5,
-  	                    widget  = wibox.container.margin,
-  	                },
-  	                -- {
-  	                --     id     = 'text_role',
-  	                --     widget = wibox.widget.textbox,
-  	                -- },
-  	                layout = wibox.layout.fixed.horizontal,
-  	            },
-  	            left  = 10,
-  	            right = 10,
-  	            widget = wibox.container.margin
-  	        },
-  	        id     = 'background_role',
-  	        widget = wibox.container.background,
-  	    },
+        widget_template = {
+            {
+                {
+                    {
+                        {
+                            left = 10,
+                            right = 10,
+                            top = 3,
+                            widget = wibox.container.margin
+                        },
+                        id = 'underline',
+                        bg = '#ffffff',
+                        shape = gears.shape.rectangle,
+                        widget = wibox.container.background
+                    },
+                    {
+                        {
+                            {
+                                id = 'icon_role',
+                                widget = wibox.widget.imagebox,
+                            },
+			    id = 'icon_container',
+                            margins = 10,
+                            widget = wibox.container.margin
+                        },
+                        shape = gears.shape.rectangle,
+                        widget = wibox.container.background
+                    },
+                    layout = wibox.layout.align.vertical,
+                },
+                left = 1,
+                right = 1,
+                widget = wibox.container.margin
+            },
+            id = 'background_role',
+            widget = wibox.container.background,
+            shape = gears.shape.rectangle,
+            create_callback = function(self, client, index, objects)
+              set_tasklist_underline(self, client, index, objects)
+              -- Signals for hover effect
+              self:connect_signal('mouse::enter', function()
+                    if self.bg ~= '#ffffff28' then
+                        self.backup     = self.bg
+                        self.has_backup = true
+                    end
+                    self.bg = '#ffffff28'
+		    self:get_children_by_id("icon_container")[1].margins = 9 
+                end)
+                self:connect_signal('mouse::leave', function()
+                    if self.has_backup then self.bg = self.backup end
+		    self:get_children_by_id("icon_container")[1].margins = 10 
+                end)
+             end,
+            update_callback = function(self, client, index, objects) set_tasklist_underline(self, client, index, objects) end
+        },
+
   	}
     -- local size_cont_tasklist =  wibox.container.constraint(tasklist_pure_widget, 'exact', nil, 30)
     -- s.tasklist = wibox.container.place(size_cont_tasklist, 'center', 'left')
@@ -426,7 +424,7 @@ awful.screen.connect_for_each_screen(function(s)
            volume = volume .. "X"
            
        end
-       widget:set_markup(" Vol: " .. volume)
+       widget:set_markup(" 🔊 " .. volume)
     end
 
     update_volume(volume_widget)
@@ -435,7 +433,8 @@ awful.screen.connect_for_each_screen(function(s)
     mytimer:connect_signal("timeout", function () update_volume(volume_widget) end)
     mytimer:start()
     
-    -- s.volume_widget = volume_widget
+    volume_widget:connect_signal("button::release", function () awful.spawn("pavucontrol") end)
+
     -----------------------------------------------------------------------------------------------
     -----------------------------------------------------------------------------------------------
 
@@ -470,6 +469,9 @@ awful.screen.connect_for_each_screen(function(s)
        }
     }
 
+    local size_cont_media =  wibox.container.constraint(media_box, 'exact', nil, 30)
+    centered_media_box = wibox.container.place(size_cont_media, 'center', 'left')
+
     update_music(media_text)
 
     -- mytimer = timer({ timeout = 0.2 })
@@ -487,6 +489,7 @@ awful.screen.connect_for_each_screen(function(s)
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
+            spacer,
 --             mylauncher,
             s.taglist,
             -- s.mypromptbox,
@@ -499,7 +502,7 @@ awful.screen.connect_for_each_screen(function(s)
             s.systray_widget,
             separator,
             media_icon,
-            media_box,
+            centered_media_box,
             separator,
             mykeyboardlayout,
             separator,
@@ -508,7 +511,7 @@ awful.screen.connect_for_each_screen(function(s)
             mytextclock,
             separator,
             s.layout_widget,
-            shutdownmenu_button,
+            s.logout,
             spacer
         },
     }
@@ -597,7 +600,7 @@ globalkeys = gears.table.join(
               {description = "decrease the number of columns", group = "layout"}),
     awful.key({ modkey     }, "b", function () awful.spawn(browser)          end,
               {description = "launch Browser", group = "launcher"}),
-    awful.key({ modkey, "Control"}, "Escape", function () awful.spawn("/usr/bin/rofi -show drun -modi drun") end,
+    awful.key({ modkey, "Control"}, "Escape", function () awful.spawn("/usr/bin/rofi -show drun -modi drun -theme oneDark") end,
               {description = "launch rofi", group = "launcher"}),
     awful.key({ modkey,           }, "e", function () awful.spawn(filemanager)            end,
               {description = "launch filemanager", group = "launcher"}),
@@ -642,7 +645,7 @@ globalkeys = gears.table.join(
 )
 
 clientkeys = gears.table.join(
-    awful.key({ modkey,           }, "f",
+    awful.key({ modkey, "Shift"   }, "f",
         function (c)
             c.fullscreen = not c.fullscreen
             c:raise()
@@ -650,9 +653,9 @@ clientkeys = gears.table.join(
         {description = "toggle fullscreen", group = "client"}),
     awful.key({ modkey,           }, "x",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
-    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
+    awful.key({ modkey,         }, "f",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
-    awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
+    awful.key({ modkey, "Shift" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
               {description = "move to master", group = "client"}),
     awful.key({ modkey,           }, "o",      function (c) c:move_to_screen()               end,
               {description = "move to screen", group = "client"}),
@@ -720,7 +723,7 @@ clientkeys = gears.table.join(
         {description = "Previous with media keys", group = "media"}),
      awful.key({modkey,           }, "l", 
         function () 
-            awful.util.spawn("~/.config/awesome/lockscreen")
+            awful.util.spawn("light-locker-command -l")
         end, 
         {description = "Lock Screen", group = "System"})
 )
@@ -786,7 +789,7 @@ root.keys(globalkeys)
 -- }}}
 
 function titlebar(c)
-    awful.titlebar.add(c, { modkey = modkey, height = 34, font = "Terminus 6"})
+    awful.titlebar.add(c, { modkey = modkey, height = 20, font = "Terminus 6"})
 end
 
 
@@ -836,23 +839,27 @@ awful.rules.rules = {
 
     -- Add titlebars to normal clients and dialogs
     { rule_any = {type = { "normal", "dialog" } },
-      except_any = { class = { "Code", "Google-chrome", "Opera", "firefox", "Brave-browser" } },
+      except_any = { class = { "Code", "Google-chrome", "Opera", "firefox" } },
       properties = { titlebars_enabled = true }
     },
 	
     -- Set Firefox to always map on the tag named "2" on screen 1.
-    { rule = { class = "Firefox" }, properties = { screen = 1, tag = "Web" } },
-    { rule = { class = "Yandex-browser-beta" }, properties = { screen = 1, tag = "Web" } },
-    { rule = { class = "Transmission-gtk" }, properties = { screen = 1, tag = "Web" } },
-    { rule = { class = "Google-chrome" }, properties = { screen = 1, tag = "Web" } },
-    { rule = { class = "Brave-browser" }, properties = { screen = 1, tag = "Web" } },
-    { rule = { class = "Opera" }, properties = { screen = 1, tag = "Web" } },
-    { rule = { class = "Subl" }, properties = { screen = 1, tag = "Code" } },  
-    { rule = { class = "gwenview" }, properties = { screen = 1, tag = "Media" } },  
-    { rule = { class = "vlc" }, properties = { screen = 1, tag = "Media" } },  
-    { rule = { class = "Gimp-2.10" }, properties = { screen = 1, tag = "Media" } }, 
-    { rule = { class = "Vncviewer" }, properties = { screen = 1, tag = "Desktops" } }, 
+    -- 🌍 📜 ⏯️ 📦
+    { rule = { class = "Firefox" }, properties = { screen = 1, tag = "🌍" } },
+    { rule = { class = "Yandex-browser-beta" }, properties = { screen = 1, tag = "🌍" } },
+    { rule = { class = "Transmission-gtk" }, properties = { screen = 1, tag = "🌍" } },
+    { rule = { class = "Google-chrome" }, properties = { screen = 1, tag = "🌍" } },
+    { rule = { class = "Brave-browser" }, properties = { screen = 1, tag = "🌍" } },
+    { rule = { class = "Opera" }, properties = { screen = 1, tag = "🌍" } },
+    { rule = { class = "Subl" }, properties = { screen = 1, tag = "📜" } },  
+    { rule = { class = "gwenview" }, properties = { screen = 1, tag = "⏯️" } },  
+    { rule = { class = "vlc" }, properties = { screen = 1, tag = "⏯️" } },  
+    { rule = { class = "Gimp-2.10" }, properties = { screen = 1, tag = "⏯️" } }, 
+    { rule = { class = "Vncviewer" }, properties = { screen = 1, tag = "📦" } }, 
 
+    -- Rule to keep oblogout covering the whole screen & be on every tag
+    { rule = { class = "Oblogout" }, properties = { fullscreen = true, sticky = true, opacity = 0.5 } }, 
+  	
 }
 -- }}}
 
@@ -957,18 +964,18 @@ end
 
 -- }}}
 
---client.connect_signal("property::floating", function (c)
+-- client.connect_signal("property::floating", function (c)
 --    if c.floating then
 --        awful.titlebar.show(c)
 --    else
 --        awful.titlebar.hide(c)
 --    end
---end)
+-- end)
 
--- Floating clients
+-- Set client shape
 client.connect_signal("manage", function (c)
     c.shape = function(cr,w,h)
-        gears.shape.rounded_rect(cr,w,h,5)
+        gears.shape.rounded_rect(cr,w,h,3)
     end
 end)
 

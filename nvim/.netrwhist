@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =8
+let g:netrw_dirhist_8='/home/mean/.config/fish'
+let g:netrw_dirhist_7='/home/mean/.config/fish/functions'
+let g:netrw_dirhist_6='/home/mean/.config/fish'
+let g:netrw_dirhist_5='/home/mean/.config/fish/conf.d'
+let g:netrw_dirhist_4='/home/mean/.config/fish'
+let g:netrw_dirhist_3='/home/mean/.config/alacritty'
+let g:netrw_dirhist_2='/home/mean/.config/dwmblocks/scripts'
+let g:netrw_dirhist_1='/home/mean/.local/bin/statusbar'
+let g:netrw_dirhist_0='/home/mean/.config/dwmblocks'
+let g:netrw_dirhist_9='/home/mean/.local/bin/statusbar'
