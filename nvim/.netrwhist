@@ -1,5 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =5
+let g:netrw_dirhistcnt =6
+let g:netrw_dirhist_6='/home/mean/.config/dwmblocks/scripts'
 let g:netrw_dirhist_5='/home/mean/.config/gtk-3.0'
 let g:netrw_dirhist_4='/home/mean/.config/dwm'
 let g:netrw_dirhist_3='/home/mean/.config/BetterThanYour/fish'
@@ -9,4 +10,3 @@ let g:netrw_dirhist_0='/home/mean/.config/BetterThanYour/fish/conf.d'
 let g:netrw_dirhist_9='/home/mean/.config/BetterThanYour/fish'
 let g:netrw_dirhist_8='/home/mean/.config/fish'
 let g:netrw_dirhist_7='/home/mean/.config/fish/functions'
-let g:netrw_dirhist_6='/home/mean/.config/fish'
