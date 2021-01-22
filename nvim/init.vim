@@ -36,3 +36,6 @@ set expandtab
 vnoremap <Tab> >
 vnoremap <S-Tab> <
 inoremap <S-Tab> <C-D>
+
+" Home gets you to first character
+inoremap <Home> <Esc>^i

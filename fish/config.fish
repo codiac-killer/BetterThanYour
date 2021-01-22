@@ -27,6 +27,12 @@ function i_feel_lucky
 end
 ################################################################################
 
+# Play random sttuff ###########################################################
+function mp3-dl
+  youtube-dl -x --audio-format mp3 --prefer-ffmpeg $argv
+end
+################################################################################
+
 # Bindings for backward/forward kill words #####################################
 bind \cH backward-kill-word
 bind \e\[3\;5~ kill-word
