@@ -41,3 +41,5 @@ bind \e\[3\;5~ kill-word
 # Write wisdom when opening a console ##########################################
 # fortune | cowsay -f dragon | lolcat
 ################################################################################
+
+starship init fish | source
