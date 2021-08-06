@@ -1,0 +1,1 @@
+/home/mean/.config/vim-airline/plugin/airline.vim

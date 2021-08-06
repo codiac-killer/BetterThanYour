@@ -1,0 +1,1 @@
+/home/mean/.config/minimalist/colors/minimalist.vim
