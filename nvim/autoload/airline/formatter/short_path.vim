@@ -1,0 +1,1 @@
+/home/mean/.config/vim-airline/autoload/airline/formatter/short_path.vim

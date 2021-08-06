@@ -1,0 +1,1 @@
+/home/mean/.config/vim-airline/autoload/airline/themes/dark.vim
