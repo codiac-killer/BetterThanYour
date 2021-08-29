@@ -1,7 +1,3 @@
-# Enable starship shell theme --------------------------------------------------
-eval "$(starship init zsh)"
-# ------------------------------------------------------------------------------
-
 # Enable Features --------------------------------------------------------------
 # Case insensitive tab completion
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
@@ -25,6 +21,30 @@ setopt appendhistory
 setopt histignorealldups
 # if only directory path is entered, cd there.
 setopt autocd
+
+# Autoload zsh add-zsh-hook and vcs_info functions (-U autoload w/o substition, -z use zsh style)
+autoload -Uz add-zsh-hook vcs_info
+# Enable substitution in the prompt.
+setopt prompt_subst
+# Run vcs_info just before a prompt is displayed (precmd)
+add-zsh-hook precmd vcs_info
+# Enable checking for (un)staged changes, enabling use of %u and %c
+zstyle ':vcs_info:*' check-for-changes true
+# Set custom strings for an unstaged vcs repo changes (*) and staged changes (+)
+zstyle ':vcs_info:*' unstagedstr ' *'
+zstyle ':vcs_info:*' stagedstr ' +'
+# Set the format of the Git information for vcs_info
+zstyle ':vcs_info:git:*' formats       '%b%u%c'
+zstyle ':vcs_info:git:*' actionformats '%b|%a%u%c'
+
+# ------------------------------------------------------------------------------
+
+# Set prompt theme -------------------------------------------------------------
+export PROMPT='%F{5}%n%f in %F{5}%2~%f ${vcs_info_msg_0_}'$'\n'"%(?.%B%F{2}>%f%b.%B%F{1}x%f%b) "
+# Enter new line after each command
+# The function set its self to be effective after the first time it is called
+# So the first prompt is stuck to the top of terminal
+precmd(){ precmd(){ print "" } }
 # ------------------------------------------------------------------------------
 
 # Plugins ----------------------------------------------------------------------
