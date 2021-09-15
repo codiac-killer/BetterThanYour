@@ -17,7 +17,7 @@ settings:
   colors.tabs.selected.odd.bg:
     global: '#454b55'
   colors.webpage.darkmode.enabled:
-    global: true
+    global: false
   colors.webpage.preferred_color_scheme:
     global: dark
   content.autoplay:
@@ -28,6 +28,7 @@ settings:
     https://discord.com: true
     https://www.messenger.com: true
   content.notifications.enabled:
+    https://www.aliexpress.com: false
     https://www.facebook.com: false
     https://www.info-world.gr: false
     https://www.messenger.com: true

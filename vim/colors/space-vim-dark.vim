@@ -1,0 +1,1 @@
+/home/mean/.config/space-vim-dark/colors/space-vim-dark.vim

@@ -34,13 +34,13 @@ zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' unstagedstr ' *'
 zstyle ':vcs_info:*' stagedstr ' +'
 # Set the format of the Git information for vcs_info
-zstyle ':vcs_info:git:*' formats       '%b%u%c'
-zstyle ':vcs_info:git:*' actionformats '%b|%a%u%c'
+zstyle ':vcs_info:git:*' formats       '%F{13}%b%f%F{1}%u%c%f'
+zstyle ':vcs_info:git:*' actionformats '%b%F{1}|%a%u%c%f'
 
 # ------------------------------------------------------------------------------
 
 # Set prompt theme -------------------------------------------------------------
-export PROMPT='%F{5}%n%f in %F{5}%2~%f ${vcs_info_msg_0_}'$'\n'"%(?.%B%F{2}:%)%f%b.%B%F{1}X(%f%b) "
+export PROMPT='%F{5}%n%f in %F{2}%2~%f ${vcs_info_msg_0_}'$'\n'"%(?.%B%F{2}:%)%f%b.%B%F{1}X(%f%b) %F{1}%B$%b%f "
 # Enter new line after each command
 # The function set its self to be effective after the first time it is called
 # So the first prompt is stuck to the top of terminal

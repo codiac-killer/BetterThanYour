@@ -1,0 +1,64 @@
+# Enable vim keybindings
+set -o vi
+
+# Configure Prompt -------------------------------------------------------------
+function pwd_with_tilde
+{
+  if [[ "$HOME" == "$PWD" ]]
+    then
+      print -n "~"
+    else
+      print -n "${PWD##*/}"
+  fi
+}
+
+function git_status
+{
+    BRANCH="$(git rev-parse --abbrev-ref HEAD 2> /dev/null)"
+    STATUS="$(git status 2> /dev/null)"
+    if [[ $? -ne 0 ]]; then printf ""; return; else printf " \e[1;35mon branch \e[1;37m$BRANCH"; fi
+    if echo ${STATUS} | grep -q -c "renamed:" || echo ${STATUS} | grep -q -c "new file::" || echo ${STATUS} | grep -q -c "modified:" || echo ${STATUS} | grep -q -c "deleted:"
+      then
+        printf "*"
+      else
+        printf ""
+    fi
+    if echo ${STATUS} | grep -q -c "branch is ahead:"
+      then
+        printf "!"
+      else
+        printf ""
+    fi
+}
+
+function exec_status
+{
+  if [[ $? -eq 0 ]]
+    then
+      print -n "\E[1;32m:)"
+    else
+      print -n "\E[1;31mX("
+  fi
+}
+
+export PS1=$'\n\E[1;37m$(logname) \E[1;35m@ \E[1;34m$(hostname) \E[1;35min \E[1;37m$(pwd_with_tilde)$(git_status)\n$(exec_status) \E[1;31m$ \E[0m'
+# ------------------------------------------------------------------------------
+
+# Functions --------------------------------------------------------------------
+# Downloads mp3 from youtube link
+function mp3dl {
+   youtube-dl -x --audio-format mp3 --prefer-ffmpeg $@
+}
+# calculates math expresions
+function calc { python -c "from math import *; print($*)"; }
+# Function for checking crypto values
+function value { while true; do clear; curl eur.rate.sx/$1@$2; sleep 100; done }
+# ------------------------------------------------------------------------------
+
+# Aliases ----------------------------------------------------------------------
+alias ls='ls --color=auto'
+# ------------------------------------------------------------------------------
+
+# Add current dir to PATH ------------------------------------------------------
+export PATH=$PATH:.
+# ------------------------------------------------------------------------------

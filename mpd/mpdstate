@@ -2,7 +2,7 @@ sw_volume: 75
 audio_device_state:1:my_fifo
 audio_device_state:1:pulse audio
 state: stop
-current: 18
+current: 0
 random: 1
 repeat: 1
 single: 0
@@ -11,110 +11,11 @@ crossfade: 0
 mixrampdb: 0.000000
 mixrampdelay: -1.000000
 playlist_begin
-0:Vodovorot.mp3
-1:ACE.mp3
-2:Longview.mp3
-3:Akidagain.mp3
-4:Another One Bites the Dust.mp3
-5:Bad Penny.mp3
-6:Balalaika.mp3
-7:Bandoleros.mp3
-8:Billy.mp3
-9:Call Of Valhalla.mp3
-10:Chained to the Couch.mp3
-11:Ciao.mp3
-12:Cowboys From Hell.mp3
-13:Don't Stop The Music.mp3
-14:Dysfunctional.mp3
-15:Fallen Leaves.mp3
-16:Fimi.mp3
-17:Firegun.mp3
-18:Forever Young.mp3
-19:Friction.mp3
-20:Fucking Hostile.mp3
-21:GAS GAS GAS.mp3
-22:Gasolina.mp3
-23:Go Hard or Go Home.mp3
-24:Hall Of The Mountain King.mp3
-25:Hallowed Be Thy Name.mp3
-26:Happy Song.mp3
-27:Heaven and Hell.mp3
-28:High Speed GTO.mp3
-29:I Surrender.mp3
-30:Joker and the Thief.mp3
-31:Krazy.mp3
-32:Lift Me Up.mp3
-33:Louder.mp3
-34:LOVE FATALITY.mp3
-35:MAD DESIRE.mp3
-36:MANTRA.mp3
-37:Moonchild.mp3
-38:Never Learn.mp3
-39:OLA GUCCI.mp3
-40:Old Number Seven.mp3
-41:Philby.mp3
-42:Ramble On.mp3
-43:Running in The 90s.mp3
-44:Rusted From The Rain.mp3
-45:Shadow Moses.mp3
-46:Shadow Play.mp3
-47:Shattered.mp3
-48:Simple Man.mp3
-49:Six Days.mp3
-50:Sleepwalking.mp3
-51:Sovietoblaster.mp3
-52:Spirit of '87.mp3
-53:Storm The Shores.mp3
-54:sugar honey ice & tea.mp3
-55:Sympathy.mp3
-56:Tati.mp3
-57:Tatschanka.mp3
-58:The Top.mp3
-59:Theios.mp3
-60:This Love.mp3
-61:Throne.mp3
-62:To ανεγκιχτο βασιλειο.mp3
-63:Tow.mp3
-64:Triplopenia.mp3
-65:Turn The Page.mp3
-66:Viking Death March.mp3
-67:Walk.mp3
-68:We Own It.mp3
-69:Welcome Home.mp3
-70:Welcome to Paradise.mp3
-71:When the Levee Breaks.mp3
-72:Α.ΛΗ.Τ.ΗΣ.mp3
-73:Ζορια.mp3
-74:Ο Πειραιας στην πλατη μου.mp3
-75:Ρούμι Τεκίλα και Άφθονη Μπύρα.mp3
-76:Σιγά μην κλάψω, σιγά μη φοβηθώ.mp3
-77:Город под подошвой.mp3
-78:ЭЛЕКТРОКЛУБ.mp3
-79:Я тебя никогда не отдам мусорам.mp3
-80:Do Like Russians!.mp3
-81:Domination.mp3
-82:Για το καλό μου.mp3
-83:Рассвет.mp3
-84:Απ' το παράθυρό μου feat. Μέγας.mp3
-85:Ηλιοκαλεσματα.mp3
-86:Евродэнс.mp3
-87:Saliva Superstar.mp3
-88:SPEED LOVER.mp3
-89:Фантом.mp3
-90:Пыль глотаю.mp3
-91:Driver's Seat.mp3
-92:Солдат.mp3
-93:Deep Enough.mp3
-94:Deja Vu.mp3
-95:Danza Kuduro.mp3
-96:Be Quick Or Be Dead.mp3
-97:Beat of the rising sun.mp3
-98:When The Smoke Is Going Down.mp3
-99:Blackout.mp3
-100:Heavy Metal (Takin' a Ride).mp3
-101:Heavy Metal.mp3
-102:The Mob Rules.mp3
-103:Red Desert Skies.mp3
-104:Is There Anybody There With.mp3
-105:Riding The Storm.mp3
+0:Six Days.mp3
+1:We Own It.mp3
+2:Deep Enough.mp3
+3:Danza Kuduro.mp3
+4:Dysfunctional.mp3
+5:Go Hard or Go Home.mp3
+6:Gasolina.mp3
 playlist_end
