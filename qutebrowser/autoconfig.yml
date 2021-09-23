@@ -33,6 +33,8 @@ settings:
     https://www.info-world.gr: false
     https://www.messenger.com: true
     https://www.reddit.com: false
+  content.register_protocol_handler:
+    https://mail.protonmail.com?to=%25s: true
   scrolling.smooth:
     global: true
   url.default_page:

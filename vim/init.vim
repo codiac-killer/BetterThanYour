@@ -17,6 +17,9 @@ set tabstop=2
 set shiftwidth=2
 set expandtab
 
+" Make backspace work on insert mode
+set backspace=indent,eol,start
+
 " Common clipboard with system
 set clipboard=unnamedplus
 
@@ -31,12 +34,18 @@ hi Comment cterm=italic
 set title
 set titlestring=%f%m%r%h
 
-" *** KEY REMAPS ***
-" Home gets you to first character
-inoremap <Home> <Esc>^i
+" Show statusline and tabbar
+set laststatus=2
+set showtabline=2
 
-" Map Ctrl+Backspace to kill word
-inoremap <C-H> <C-W>
+" Hide mode in command line
+set noshowmode
+
+" Highlight current line
+set cursorline
+
+" Allow buffers to open even if current is not saved
+set hidden
 
 " *** HOOKS ***
 " Save callbacks

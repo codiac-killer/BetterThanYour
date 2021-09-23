@@ -1,6 +1,12 @@
 # Enable vim keybindings
 set -o vi
 
+# Environment Variables --------------------------------------------------------
+EDITOR=vim
+FM=sfm
+TERMINAL=st
+# ------------------------------------------------------------------------------
+
 # Configure Prompt -------------------------------------------------------------
 function pwd_with_tilde
 {
