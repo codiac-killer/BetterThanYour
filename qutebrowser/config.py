@@ -29,9 +29,9 @@ themes.dracula.draw.blood(c, {
 })
 
 c.tabs.position = 'left'
-c.tabs.width = 40
+c.tabs.width = 120
 c.tabs.favicons.scale = 2.0
 c.tabs.padding = {"bottom": 10, "left": 5, "right": 5, "top": 10}
-c.tabs.title.format = '{audio}'
+c.tabs.title.format = '{audio}{current_title}'
 c.tabs.indicator.width = 0
 
