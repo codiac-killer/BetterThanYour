@@ -1,1 +1,0 @@
-/home/mean/.config/vim-airline/autoload/airline/extensions/gen_tags.vim

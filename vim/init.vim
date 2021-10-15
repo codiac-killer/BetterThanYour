@@ -1,80 +1,100 @@
-" *** ENABLE FEATURES ***
-" Enable line numbers
-set number
-
-" Enable syntax highlighting
-syntax on
-
-" Enable mouse use
-set mouse=a
-
-" Mathing brackets
-set showmatch
-
-" Tab
-" Set length
+" ***** ENABLE FEATURES *****
+" for tab size
 set tabstop=2
 set shiftwidth=2
-set expandtab
+
+" Set Colorscheme
+syntax enable
+set background=dark
+colorscheme space-vim-dark
+" Set comment style
+hi Comment guifg=#5C6370 ctermfg=59
+hi Comment cterm=italic
 
 " Make backspace work on insert mode
 set backspace=indent,eol,start
 
-" Common clipboard with system
-set clipboard=unnamedplus
+" Show linenumbers
+set number
 
-" Set my nice colorscheme, darkversion
-set background=dark
-colorscheme space-vim-dark
-" Change comment to grey
-hi Comment guifg=#5C6370 ctermfg=59
-hi Comment cterm=italic
+" Autoindentation
+set smartindent
 
-" Set title to only file name(+modification status)
-set title
-set titlestring=%f%m%r%h
-
-" Show statusline and tabbar
-set laststatus=2
-set showtabline=2
-
-" Hide mode in command line
+" hide mode under the statusline
 set noshowmode
 
-" Highlight current line
+" tab line
+set showtabline=2
+
+" Hightlight current line
 set cursorline
 
-" Allow buffers to open even if current is not saved
+" Get file's dir as working dir
+set autochdir
+
+" Make title only filename(+ modification status)
+set titlestring=%f%m%r%h
+
+" Enable opening buffers 'hidden' on background
 set hidden
 
-" *** HOOKS ***
-" Save callbacks
-autocmd BufWritePost *.md !pandoc <afile> --pdf-engine=xelatex -o <afile>.pdf
+" Highlight search matches
+set hlsearch
 
-" *** Custom Functions/Commands ***
-command MakePDF ! pdflatex -synctex=1 -interaction=nonstopmode %:t
+" ***** KEYBINDS *****
+" Browse through buffers with key binds
+nnoremap <C-N> :bnext<CR>
+nnoremap <C-P> :bprev<CR>
+
+" ***** HOOKS *****
+
+" Compile latex on save
+command MakePDF !/usr/local/texlive/2020/bin/x86_64-linux/pdflatex -synctex=1 -interaction=nonstopmode %:t
+
+au BufReadPost *.tex set syntax=tex
 
 " *** CUSTOM STATUS LINE ***
-" set statusline=
-" set statusline+=%#DiffAdd#%{(mode()=='n')?'\ \ NORMAL\ ':''}
-" set statusline+=%#DiffChange#%{(mode()=='i')?'\ \ INSERT\ ':''}
-" set statusline+=%#DiffDelete#%{(mode()=='r')?'\ \ RPLACE\ ':''}
-" set statusline+=%#Cursor#%{(mode()=='v')?'\ \ VISUAL\ ':''}
-" set statusline+=\ %n\           " buffer number
-" set statusline+=%#Visual#       " colour
-" set statusline+=%{&paste?'\ PASTE\ ':''}
-" set statusline+=%{&spell?'\ SPELL\ ':''}
-" set statusline+=%#Cursor#               " colour
-" set statusline+=%#CursorLine#     " colour
-" set statusline+=\ %t\                   " short file name
-" set statusline+=%#CursorIM#     " colour
-" set statusline+=%R                        " readonly flag
-" set statusline+=%M                        " modified [+] flag
-" set statusline+=%#Cursor#               " colour
-" set statusline+=%=                          " right align
-" set statusline+=%#CursorLine#   " colour
-" set statusline+=\ %Y\                   " file type
-" set statusline+=%#CursorIM#     " colour
-" set statusline+=\ %3l:%-2c\         " line + column
-" set statusline+=%#Cursor#       " colour
-" set statusline+=\ %3p%%\                " percentage
+
+" Enable status line
+set laststatus=2
+
+set statusline=
+" What MODE
+set statusline+=%#StatusLineTerm#%{(mode()=='n')?'\ \ NORMAL\ ':''}
+set statusline+=%#Insert#%{(mode()=='i')?'\ \ INSERT\ ':''}
+set statusline+=%#Replace#%{(mode()=='R')?'\ \ RPLACE\ ':''}
+set statusline+=%#VisualMode#%{(mode()=='v')?'\ \ VISUAL\ ':''}
+set statusline+=%#VisualLine#%{(mode()=='V')?'\ \ V-LINE\ ':''}
+set statusline+=%#Cursor#%{(mode()=='c')?'\ \ COMMND\ ':''}
+set statusline+=%#Visual#                               " colour
+" Important Flags
+set statusline+=%{&paste?'\ \ PASTE\ ':''}
+set statusline+=%{&spell?'\ \ SPELL\ ':''}
+
+set statusline+=%#CursorLine#                           " colour
+set statusline+=\ %t\                                   " short file name
+set statusline+=%#ROStatus#%r                           " readonly flag
+set statusline+=%#ModStatus#%m                          " modified [+] flag
+set statusline+=%#CursorLine#                           " colour
+
+set statusline+=%=                                      " right align
+set statusline+=%3*\ %{''.(&fenc!=''?&fenc:&enc).''}\   " encoding
+set statusline+=\ %{&ff}\                               " file format
+set statusline+=%#Syntax#                               " colour
+set statusline+=\ %Y\                                   " syntax
+set statusline+=%#CursorPos#                            " colour
+set statusline+=\ %3l:%-2c\                             " line + column
+set statusline+=%#CursorLine#                           " colour
+set statusline+=\ %3p%%\                                " percentage
+
+" Set Cursor ******************************************************************
+let &t_SI = "\e[6 q" " Bar cursor for start insert mode
+let &t_EI = "\e[2 q" " Block cursor for exit insert mode
+
+" Delay between hitting key and switching mode
+augroup FastEscape
+  autocmd!
+  au InsertEnter * set timeoutlen=0
+  au InsertLeave * set timeoutlen=1000
+augroup END
+
