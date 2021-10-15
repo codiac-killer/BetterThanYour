@@ -63,6 +63,7 @@ function value { while true; do clear; curl eur.rate.sx/$1@$2; sleep 100; done }
 
 # Aliases ----------------------------------------------------------------------
 alias ls='ls --color=auto'
+alias grep='grep --color=auto'
 # ------------------------------------------------------------------------------
 
 # Add current dir to PATH ------------------------------------------------------
