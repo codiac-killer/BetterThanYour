@@ -40,7 +40,7 @@ zstyle ':vcs_info:git:*' actionformats '%b%F{1}|%a%u%c%f'
 # ------------------------------------------------------------------------------
 
 # Set prompt theme -------------------------------------------------------------
-export PROMPT='%F{5}%n%f in %F{2}%2~%f ${vcs_info_msg_0_}'$'\n'"%(?.%B%F{2}:%)%f%b.%B%F{1}X(%f%b) %F{1}%B$%b%f "
+export PROMPT='%B%n %F{magenta}@%f %F{blue}%m%f %F{magenta}in%f %2~ ${vcs_info_msg_0_}%b'$'\n'"%(?.%B%F{2}:%)%f%b.%B%F{1}X(%f%b) %F{1}%B$%b%f "
 # Enter new line after each command
 # The function set its self to be effective after the first time it is called
 # So the first prompt is stuck to the top of terminal
@@ -91,6 +91,10 @@ bindkey '^[[1;5D' backward-word
 # Ctrl + Arrow Right
 bindkey '^[Oc' forward-word
 bindkey '^[[1;5C' forward-word
+# ------------------------------------------------------------------------------
+
+# Features ---------------------------------------------------------------------
+set -o vi
 # ------------------------------------------------------------------------------
 
 # Functions --------------------------------------------------------------------
