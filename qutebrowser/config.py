@@ -1,6 +1,6 @@
 # load theme from git clone https://github.com/dracula/qutebrowser-dracula-theme.git ~/.config/dracula && ln -s ~/.config/dracula ~/.config/BetterThanYour/qutebrowser/themes/dracula
 # config.source('themes/dracula')
-import themes.dracula.draw
+import themes.spacethemedark
 
 # True allows to load settings configured in autoconfig.yml
 config.load_autoconfig(True)
@@ -18,10 +18,10 @@ c.aliases = {
 c.url.searchengines = {
    'DEFAULT' : 'https://searx.be/search?q={}',
    'osm' : 'https://www.openstreetmap.org/search?query={}',
-   'youtube' : 'https://www.youtube.com/results?search_query={}',
+   'yewtube' : 'https://www.yewtu.be/search?q={}',
 }
 
-themes.dracula.draw.blood(c, {
+themes.spacethemedark.blood(c, {
     'spacing': {
         'vertical': 2,
         'horizontal': 8
