@@ -64,6 +64,14 @@ then
 fi
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # ***************************************************************
+
+# Improved vi keybinds ******************************************
+if [ ! -f ~/.zsh/zsh-vi-mode/zsh-vi-mode.plugin.zsh ]
+then
+  git clone https://github.com/jeffreytse/zsh-vi-mode.git ~/.zsh/zsh-vi-mode
+fi
+source ~/.zsh/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+# ***************************************************************
 # ------------------------------------------------------------------------------
 
 # Keybindings ------------------------------------------------------------------
