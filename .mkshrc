@@ -2,9 +2,9 @@
 set -o vi
 
 # Environment Variables --------------------------------------------------------
-EDITOR=vim
-FM=sfm
-TERMINAL=st
+export EDITOR=vim
+export FM=sfm
+export TERMINAL=st
 # ------------------------------------------------------------------------------
 
 # Configure Prompt -------------------------------------------------------------
