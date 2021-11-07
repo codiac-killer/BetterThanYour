@@ -18,7 +18,7 @@ c.aliases = {
 c.url.searchengines = {
    'DEFAULT' : 'https://searx.be/search?q={}',
    'osm' : 'https://www.openstreetmap.org/search?query={}',
-   'yewtube' : 'https://www.yewtu.be/search?q={}',
+   'yewtube' : 'https://yewtu.be/search?q={}',
 }
 
 themes.spacethemedark.blood(c, {
