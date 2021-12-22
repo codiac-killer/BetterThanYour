@@ -55,6 +55,7 @@ then
   git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 fi
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+ZSH_AUTOSUGGEST_STRATEGY=(completion history)
 # ***************************************************************
 
 # Syntax Hightlighting ******************************************
@@ -118,6 +119,7 @@ value(){while true; do clear; curl eur.rate.sx/$1@$2; sleep 100; done}
 
 # Aliases ----------------------------------------------------------------------
 alias ls='ls --color=auto'
+alias grep='grep --color=auto'
 # ------------------------------------------------------------------------------
 
 # Add current dir to PATH ------------------------------------------------------
