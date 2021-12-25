@@ -1,7 +1,3 @@
-# load theme from git clone https://github.com/dracula/qutebrowser-dracula-theme.git ~/.config/dracula && ln -s ~/.config/dracula ~/.config/BetterThanYour/qutebrowser/themes/dracula
-# config.source('themes/dracula')
-import themes.spacethemedark
-
 # True allows to load settings configured in autoconfig.yml
 config.load_autoconfig(True)
 
@@ -21,13 +17,6 @@ c.url.searchengines = {
    'yewtube' : 'https://yewtu.be/search?q={}',
    'invidious' : 'https://invidious.mutahar.rocks/search?q={}',
 }
-
-themes.spacethemedark.blood(c, {
-    'spacing': {
-        'vertical': 2,
-        'horizontal': 8
-    }
-})
 
 c.tabs.position = 'left'
 c.tabs.width = 120
