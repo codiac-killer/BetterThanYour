@@ -37,6 +37,7 @@ zstyle ':vcs_info:*' stagedstr ' +'
 zstyle ':vcs_info:git:*' formats       '%F{13}%b%f%F{1}%u%c%f'
 zstyle ':vcs_info:git:*' actionformats '%b%F{1}|%a%u%c%f'
 
+set -o vi
 # ------------------------------------------------------------------------------
 
 # Set prompt theme -------------------------------------------------------------
@@ -100,10 +101,13 @@ bindkey '^[[1;5D' backward-word
 # Ctrl + Arrow Right
 bindkey '^[Oc' forward-word
 bindkey '^[[1;5C' forward-word
-# ------------------------------------------------------------------------------
 
-# Features ---------------------------------------------------------------------
-set -o vi
+# Dvorak keys for vi mode
+bindkey -M vicmd h vi-backward-char
+bindkey -M vicmd t vi-down-line-or-history
+bindkey -M vicmd n vi-up-line-or-history
+bindkey -rM vicmd s
+bindkey -M vicmd s vi-forward-char
 # ------------------------------------------------------------------------------
 
 # Functions --------------------------------------------------------------------
