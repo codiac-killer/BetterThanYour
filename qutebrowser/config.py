@@ -15,7 +15,7 @@ c.url.searchengines = {
    'DEFAULT' : 'https://searx.be/search?q={}',
    'osm' : 'https://www.openstreetmap.org/search?query={}',
    'yewtube' : 'https://yewtu.be/search?q={}',
-   'invidious' : 'https://invidious.mutahar.rocks/search?q={}',
+   'invidious' : 'https://youtube.076.ne.jp/search?q={}',
 }
 
 c.tabs.position = 'left'
