@@ -39,3 +39,4 @@ config.bind('l', 'search-next')
 config.bind('L', 'search-prev')
 
 config.bind('e', 'hint all')
+config.bind('E', 'hint all tab')
